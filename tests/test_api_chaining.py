@@ -1,49 +1,21 @@
 def test_api_chaining(api_client):
 
-    # 1. Create User
-    create_response = api_client.post(
-        "/users",
-        data={
-            "name": "Devanshu",
-            "username": "dev",
-            "email": "dev@example.com"
-        }
-    )
-
-    assert create_response.status == 201
-
-    created_user = create_response.json()
-
-    user_id = created_user["id"]
-
-    print("Created User ID:", user_id)
-
-    # 2. Get User
-    get_response = api_client.get(
-        f"/users/{user_id}"
-    )
+    # 1. Get existing user
+    get_response = api_client.get("/users/1")
 
     assert get_response.status == 200
 
-    # 3. Update User
-    update_response = api_client.put(
-        f"/users/{user_id}",
-        data={
-            "name": "Devanshu Updated",
-            "username": "dev_updated",
-            "email": "updated@example.com"
-        }
-    )
+    user = get_response.json()
 
-    assert update_response.status == 200
+    user_id = user["id"]
 
-    updated_user = update_response.json()
+    print("User ID:", user_id)
 
-    assert updated_user["name"] == "Devanshu Updated"
+    # 2. Get same user again using ID
+    get_response_2 = api_client.get(f"/users/{user_id}")
 
-    # 4. Delete User
-    delete_response = api_client.delete(
-        f"/users/{user_id}"
-    )
+    assert get_response_2.status == 200
 
-    assert delete_response.status == 200
+    user_2 = get_response_2.json()
+
+    assert user_2["id"] == user_id

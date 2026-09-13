@@ -1,7 +1,5 @@
 import os
 
-ENV = os.getenv("TEST_ENV", "qa")
-
 ENVIRONMENTS = {
     "dev": {
         "api_base_url": "https://jsonplaceholder.typicode.com"
@@ -14,5 +12,15 @@ ENVIRONMENTS = {
     }
 }
 
-API_BASE_URL = ENVIRONMENTS[ENV]["api_base_url"]
+
+def get_config(environment):
+    if environment not in ENVIRONMENTS:
+        raise ValueError(
+            f"Invalid environment: {environment}. "
+            f"Choose from: {list(ENVIRONMENTS.keys())}"
+        )
+
+    return ENVIRONMENTS[environment]
+
+
 API_TOKEN = os.getenv("API_TOKEN")
