@@ -13,6 +13,9 @@ def logged_in_page(browser):
 
     page = context.new_page()
 
+    # Open the authenticated application page
+    page.goto("https://www.saucedemo.com/inventory.html")
+
     yield page
 
     context.close()
